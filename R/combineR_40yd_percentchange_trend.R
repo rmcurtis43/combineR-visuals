@@ -9,7 +9,7 @@ data <- pull_combine_data()
 ####################################
 
 
-slj_data <- data %>%
+x40yd_data <- data %>%
   select(player, draft_year, position2, x40yd) %>%
   drop_na(x40yd) %>%
   filter(!position2 %in% c("PK", "LS")) %>%
@@ -20,13 +20,13 @@ slj_data <- data %>%
 
 
 
-slj_year_position2_mean_change <- slj_data %>%
+x40yd_year_position2_mean_change <- x40yd_data %>%
   ungroup() %>%
   group_by(draft_year, position2) %>%
   summarise(avg = mean(x40yd, na.rm = T)) %>%
   drop_na() %>%
   ungroup() %>%
-  bind_rows(slj_data %>%
+  bind_rows(x40yd_data %>%
               ungroup() %>%
               group_by(draft_year) %>%
               summarise(avg = mean(x40yd, na.rm = T)) %>%
@@ -34,13 +34,13 @@ slj_year_position2_mean_change <- slj_data %>%
               ungroup() %>%
               mutate(position2 = 'All Positions')) %>%
   arrange(position2, draft_year) %>%
-  left_join(slj_data %>%
+  left_join(x40yd_data %>%
               ungroup() %>%
               filter(draft_year == 2000) %>%
               group_by(position2) %>%
               summarise(avg_2000 = mean(x40yd, na.rm = T)) %>%
               bind_rows(
-                slj_data %>%
+                x40yd_data %>%
                   ungroup() %>%
                   filter(draft_year == 2000) %>%
                   summarise(avg_2000 = mean(x40yd, na.rm = T)) %>%
@@ -50,12 +50,12 @@ slj_year_position2_mean_change <- slj_data %>%
   mutate(change_from_2000 = (avg - avg_2000)/avg_2000)
 
 
-slj_year_position2_mean_change %>%
+x40yd_year_position2_mean_change %>%
   nest(-position2) %>%
   mutate(model = map(data, ~ lm(change_from_2000 ~ draft_year, data = .x)),
          slope = map_dbl(model, ~ signif(.x$coef[[2]], 5))) %>%
   select(-data, -model) %>%
-  left_join(slj_year_position2_mean_change) %>%
+  left_join(x40yd_year_position2_mean_change) %>%
   ggplot(aes(draft_year, change_from_2000, color = position2)) +
   geom_point() +
   geom_line() +
@@ -71,6 +71,8 @@ slj_year_position2_mean_change %>%
        title="Rate of Change in 40yd Time [s]",
        subtitle="2000 - 2021 NFL Draft Combine",
        caption="@RyanM_Curtis | data: {combineR} | Pro Football Reference") 
+
+
 
 
 ggsave("images/x40yd_percent_trend.png", dpi = 320, width = 14, height = 10)

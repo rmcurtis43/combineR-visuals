@@ -11,13 +11,24 @@ This repo contains a collection of visual built using the [{combineR}](https://g
 
 ## Examples
 
+### Comparison
+
 <img src="images/power_position.png" align="center" width="800" />
 
+### Trends
 
 ***
 
 
 <img src="images/power_position_trend.png" align="center" width="800" />
+
+***
+
+
+<img src="images/x40yd_percent_trend.png" align="center" width="800" />
+
+
+### Relationships
 
 
 ***
@@ -31,8 +42,5 @@ This repo contains a collection of visual built using the [{combineR}](https://g
 <img src="images/power_40yd.png" align="center" width="800" />
 
 
-***
 
-
-<img src="images/x40yd_percent_trend.png" align="center" width="800" />
 

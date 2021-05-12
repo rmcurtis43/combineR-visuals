@@ -17,6 +17,6 @@ corrplot.mixed(cor_data)
 
 
 
-png(height=600, width=600, file="images/corrplot.png", type = "cairo")
+png(height=1000, width=1000, file="images/corrplot.png", type = "cairo")
 corrplot.mixed(cor_data)
 dev.off()
